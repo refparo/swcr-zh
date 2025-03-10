@@ -5,7 +5,10 @@
 
 #let text-size = 10.5pt
 #set text(
-  font: ("BaskervilleF", "Source Han Serif SC"),
+  font: (
+    (name: "BaskervilleF", covers: "latin-in-cjk"),
+    "Source Han Serif SC",
+  ),
   top-edge: text-size,
 )
 
@@ -19,15 +22,14 @@
   y: (297mm - text-size * 0.25 * 282) / 2,
 )
 
-#set page(
-  margin: (x: 0em, y: page-margin.y),
-)
+#set page(margin: (x: 0em, y: page-margin.y))
 
 #grid(
   columns: (1fr, 1fr, 1fr),
   row-gutter: text-size * 2,
   grid.cell(
-    x: 0, y: 0,
+    x: 0,
+    y: 0,
     inset: (left: page-margin.x),
   )[
     *姓名*：
@@ -36,7 +38,8 @@
     *年龄*：
   ],
   grid.cell(
-    x: 0, y: 1,
+    x: 0,
+    y: 1,
     rowspan: 2,
     inset: (left: page-margin.x),
   )[
@@ -68,8 +71,9 @@
     #h(1em)经验加值：\
   ],
   grid.cell(
-    x: 0, y: 3,
-    inset: (left: page-margin.x)
+    x: 0,
+    y: 3,
+    inset: (left: page-margin.x),
   )[
     *职业/等级*：\
     #h(1em)经验：\
@@ -94,9 +98,10 @@
     *种族能力*：
   ],
   grid.cell(
-    x: 1, y: 1,
+    x: 1,
+    y: 1,
     colspan: 2,
-    inset: (right: page-margin.x)
+    inset: (right: page-margin.x),
   )[
     *护甲等级*（AC）：
 
@@ -144,7 +149,7 @@
 
     #enum(
       ..(linebreak() + box(height: text-size),) * 21,
-      []
+      [],
     )
   ]
 )

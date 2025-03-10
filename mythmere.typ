@@ -139,7 +139,7 @@
     )
   }
 
-  let spell(name, range: [], duration: [], body) = block(
+  let spell(name, range: [], duration: [], ..body) = block(
     breakable: false,
     above: leading + line-height,
   )[
@@ -155,7 +155,9 @@
     ]
 
     #set par(spacing: leading)
-    #body
+    #for body in body.pos() {
+      block(body)
+    }
   ]
 
   let notes(body) = text(size: 9pt, body)
@@ -164,7 +166,11 @@
     // inline styling
 
     set text(
-      font: en-font + zh-font,
+      font: en-font.map(f => (
+        name: f,
+        covers: "latin-in-cjk",
+      ))
+        + zh-font,
       size: text-size,
       top-edge: text-size,
       spacing: 0.25em,
@@ -172,10 +178,6 @@
       region: "cn",
       script: "hans",
     )
-    // @typstyle off
-    show regex(
-      "[。．？！，、；：“”‘’『』「」（）【】［］〔〕【】—…~·《》〈〉/]+"
-    ): set text(font: zh-font)
     show math.equation: set text(
       font: math-font + zh-font,
       weight: "regular",
@@ -194,7 +196,7 @@
 
     // block styling
 
-    set block(spacing: par-spacing)
+    set block(below: par-spacing)
 
     set par(
       justify: true,
@@ -212,6 +214,8 @@
         prev.filter(elem => elem.scope != none)
       ))
     }
+
+    show outline: set block(below: leading)
 
     set list(
       marker: ([•], [‣], [–]).map(box.with(width: 0.5em)),
@@ -294,37 +298,37 @@
 }
 
 #[
-#let (theme, set-heading) = mythmere()
-#show: theme
+  #let (theme, set-heading) = mythmere()
+  #show: theme
 
-= Heading 1 标题 1
+  = Heading 1 标题 1
 
-Body text 正文
+  Body text 正文
 
-== Heading 2 标题 2
+  == Heading 2 标题 2
 
-Body text 正文
+  Body text 正文
 
-#set-heading(1, scope: none)
-=== Heading 3 标题 3
-#set-heading(-1)
+  #set-heading(1, scope: none)
+  === Heading 3 标题 3
+  #set-heading(-1)
 
-Body text 正文
+  Body text 正文
 
-==== Heading 4 标题 4
+  ==== Heading 4 标题 4
 
-Body text 正文
+  Body text 正文
 
-===== Heading 5 标题 5
-#set-heading(1)
+  ===== Heading 5 标题 5
+  #set-heading(1)
 
-Body text 正文
+  Body text 正文
 
-====== Heading 6 标题 6
+  ====== Heading 6 标题 6
 
-Body text 正文
+  Body text 正文
 
-===== Heading 5
+  ===== Heading 5
 
-====== Heading 6 标题 6
+  ====== Heading 6 标题 6
 ]
