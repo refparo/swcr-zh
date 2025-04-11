@@ -177,6 +177,7 @@
       lang: "zh",
       region: "cn",
       script: "hans",
+      features: ("fwid",),
     )
     show math.equation: set text(
       font: math-font + zh-font,
