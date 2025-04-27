@@ -1,10 +1,11 @@
 #let mythmere(
   text-size: 10.5pt,
-  zh-font: ("Source Han Serif SC",),
-  zh-sans-font: ("Source Han Sans SC",),
-  en-font: ("BaskervilleF",),
-  math-font: ("New Computer Modern Math",),
-  raw-font: ("DejaVu Sans Mono",),
+  zh-font: "Source Han Serif SC",
+  zh-sans-font: "Source Han Sans SC",
+  en-font: "BaskervilleF",
+  math-font: "New Computer Modern Math",
+  raw-font: "DejaVu Sans Mono",
+  emoji-font: "Twemoji",
   paper: "a5",
 ) = {
   // private values
@@ -12,6 +13,41 @@
   let heading-state = state("mythmere-heading-state", ())
 
   // exported values
+
+  let text-font = (
+    (
+      name: en-font,
+      covers: "latin-in-cjk",
+    ),
+    (
+      name: emoji-font,
+      covers: regex(`\p{Emoji}`.text),
+    ),
+    zh-font,
+  )
+  let heading-font = (
+    (
+      name: emoji-font,
+      covers: regex(`\p{Emoji}`.text),
+    ),
+    zh-sans-font,
+  )
+  let raw-font = (
+    raw-font,
+    (
+      name: emoji-font,
+      covers: regex(`\p{Emoji}`.text),
+    ),
+    zh-sans-font,
+  )
+  let math-font = (
+    math-font,
+    (
+      name: emoji-font,
+      covers: regex(`\p{Emoji}`.text),
+    ),
+    zh-font,
+  )
 
   let leading = text-size * 0.5
   let line-height = text-size + leading
@@ -38,14 +74,14 @@
       .sum(default: 0)
     if level == 1 {
       set text(
-        font: zh-sans-font,
+        font: heading-font,
         size: text-size * 2.5,
         top-edge: text-size + line-height,
       )
       block(it, above: leading + line-height)
     } else if level == 2 {
       set text(
-        font: zh-sans-font,
+        font: heading-font,
         size: text-size * 2,
         top-edge: text-size + line-height,
         baseline: text-size * 0.25,
@@ -53,7 +89,7 @@
       block(it, above: leading)
     } else if level == 3 {
       set text(
-        font: zh-sans-font,
+        font: heading-font,
         size: text-size * 1.75,
         top-edge: text-size + line-height,
         baseline: text-size * 0.25,
@@ -166,25 +202,21 @@
     // inline styling
 
     set text(
-      font: en-font.map(f => (
-        name: f,
-        covers: "latin-in-cjk",
-      ))
-        + zh-font,
+      font: text-font,
       size: text-size,
       top-edge: text-size,
       spacing: 0.25em,
       lang: "zh",
       region: "cn",
       script: "hans",
-      features: ("fwid",),
     )
+    show "·": set text(features: ("fwid",))
     show math.equation: set text(
-      font: math-font + zh-font,
+      font: math-font,
       weight: "regular",
     )
     show raw: set text(
-      font: raw-font + zh-font,
+      font: raw-font,
       size: text-size,
       spacing: 100%,
     )
@@ -282,6 +314,10 @@
   }
 
   (
+    text-font: text-font,
+    heading-font: heading-font,
+    raw-font: raw-font,
+    math-font: math-font,
     leading: leading,
     line-height: line-height,
     par-spacing: par-spacing,
